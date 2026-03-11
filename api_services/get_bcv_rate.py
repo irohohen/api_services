@@ -17,7 +17,7 @@ def scrap_get_bcv_rate(moneda:str = "dolar") -> float:
     # Deshabilitar advertencias SSL para la página del BCV
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-    url = "https://www.bcv.org.ve/estadisticas/tipo-de-cambio-de-referencia"
+    url = "https://www.bcv.org.ve/estadisticas/tipo-cambio-de-referencia-smc"
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
     }
