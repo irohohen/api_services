@@ -4,6 +4,7 @@ import re
 import urllib3
 import time
 from typing import Optional, List, Tuple, Dict, Any
+from api_services.utils import parse_currency_value
 
 # Deshabilitar advertencias SSL a nivel de módulo
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -34,8 +35,8 @@ def scrap_get_bcv_rate(moneda: str = "dolar") -> float:
         if moneda_element:
             for element in moneda_element.find_all(['div', 'span', 'strong']):
                 text = element.get_text(strip=True)
-                if re.match(r'^\d{1,3}[,\.]\d{2,8}$', text):
-                    return float(text.replace(',', '.'))
+                if re.match(r'^\d{1,3}(?:\.\d{3})*,\d{2,8}$|^\d+([,\.]\d+)?$', text):
+                    return parse_currency_value(text)
         
         raise BCVError(f"No se encontró la tasa de cambio para '{moneda}' en la página del BCV.")
 

@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import urllib3
 from typing import Dict, Any
+from api_services.utils import parse_currency_value
 
 # Deshabilitar advertencias SSL
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -52,13 +53,13 @@ def get_bcv_bank_rates() -> Dict[str, Dict[str, Dict[str, float]]]:
             # 0: Fecha, 1: Banco, 2: Compra, 3: Venta
             fecha = cols[0].get_text(strip=True)
             banco = cols[1].get_text(strip=True)
-            compra_str = cols[2].get_text(strip=True).replace(',', '.')
-            venta_str = cols[3].get_text(strip=True).replace(',', '.')
+            compra_raw = cols[2].get_text(strip=True)
+            venta_raw = cols[3].get_text(strip=True)
 
             try:
-                compra = float(compra_str)
-                venta = float(venta_str)
-            except ValueError:
+                compra = parse_currency_value(compra_raw)
+                venta = parse_currency_value(venta_raw)
+            except (ValueError, Exception):
                 continue # Saltamos filas con datos no numéricos
 
             if fecha not in data_grouped:
